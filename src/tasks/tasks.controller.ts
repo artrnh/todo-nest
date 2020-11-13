@@ -13,13 +13,15 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
+import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 import { Task } from './task.entity';
 import { TaskStatus } from './task-status.enum';
-import { AuthGuard } from '@nestjs/passport';
 import { User } from '../auth/user.entity';
 import { GetUser } from '../auth/get-user.decorator';
 
@@ -29,6 +31,7 @@ export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get()
+  @ApiOkResponse({ type: Task })
   getTasks(
     @Query(ValidationPipe) filterDto: GetTasksFilterDto,
     @GetUser() user: User,
@@ -37,6 +40,7 @@ export class TasksController {
   }
 
   @Get('/:id')
+  @ApiOkResponse({ type: Task })
   getTaskById(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
@@ -45,6 +49,7 @@ export class TasksController {
   }
 
   @Post()
+  @ApiCreatedResponse({ type: Task })
   @UsePipes(ValidationPipe)
   createTask(
     @Body() createTaskDto: CreateTaskDto,
@@ -54,6 +59,7 @@ export class TasksController {
   }
 
   @Delete('/:id')
+  @ApiOkResponse()
   deleteTask(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
@@ -62,6 +68,7 @@ export class TasksController {
   }
 
   @Patch('/:id/status')
+  @ApiOkResponse({ type: Task })
   updateTaskStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,

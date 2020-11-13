@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 import {
   BaseEntity,
   Column,
@@ -11,15 +13,19 @@ import { User } from '../auth/user.entity';
 
 @Entity()
 export class Task extends BaseEntity {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty()
   @Column()
   title: string;
 
+  @ApiProperty()
   @Column()
   description: string;
 
+  @ApiProperty({ enum: TaskStatus })
   @Column()
   status: TaskStatus;
 

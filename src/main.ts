@@ -26,4 +26,5 @@ async function bootstrap() {
 
   logger.log(`App is listening on port ${port}`);
 }
+
 bootstrap();
